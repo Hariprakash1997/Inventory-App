@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Product } from '../product.model';
 
 @Component({
   selector: 'app-products-list',
@@ -7,7 +8,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsListComponent implements OnInit {
 
-  constructor() { }
+  @Input() productList: Product[];
+
+  @Output() productSelected: EventEmitter<Product>;
+
+  private currentProduct: Product;
+
+  constructor() {
+    this.productSelected = new EventEmitter();
+  }
+
+  clicked(product: Product): void {
+    this.currentProduct = product;
+    this.productSelected.emit(product);
+  }
+
+  isSelected(product: Product): boolean {
+    if (!product || !this.currentProduct) {
+      return false;
+    }
+
+    return product.sku === this.currentProduct.sku;
+  }
 
   ngOnInit() {
   }
